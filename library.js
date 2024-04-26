@@ -5,10 +5,15 @@ function Book(title, author, pageCount, read) {
     this.author = author;
     this.pageCount = pageCount;
     this.read = read;
-    this.info = function () {
-        return `${title} by ${author}, ${pageCount} pages, ${read ? "read" : "not read"}`
-    }
 };
+
+// Book constructor prototype
+Book.prototype.info = function () {
+    return `${this.title} by ${this.author}, ${this.pageCount} pages, ${this.read ? "read" : "not read"}`;
+};
+Book.prototype.readToggle = function () {
+    this.read = !this.read;
+}
 
 // Add to library
 function addBookToLibrary(title, author, pageCount, read) {
@@ -30,7 +35,7 @@ for (let i = 0; i < myLibrary.length; i++) {
 }
 
 // Build in DOM
-function addBook(book, index) {
+function addBook(book) {
     // Create tile
     const libraryGrid = document.getElementById("libraryGrid");
     const libraryTile = libraryGrid.appendChild(document.createElement("div"));
@@ -70,7 +75,6 @@ function addBook(book, index) {
     closeCross.classList.add("closeCross");
     closeCross.setAttribute("type", "image")
     closeCross.setAttribute("src", "./Close button.svg")
-    closeCross.setAttribute("data-book-index", index);
 }
 
 // Check if new book form is filled
@@ -114,8 +118,12 @@ bookGrid.addEventListener("click", removeButtons);
 
 function removeButtons(event) {
     if (event.target.classList.contains('closeCross')) {
-        const bookIndex = Number(event.target.getAttribute("data-book-index"));
+        const bookTitle = event.target.closest('.libraryTile').querySelector('.bookTitle').textContent;
+        const bookIndex = myLibrary.findIndex(book => book.title === bookTitle);
+        
         myLibrary.splice(bookIndex, 1);
+
+        console.table(myLibrary);
 
         const cardToDelete = event.target.closest('.libraryTile');
         cardToDelete.parentNode.removeChild(cardToDelete);
