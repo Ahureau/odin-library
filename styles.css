@@ -90,13 +90,13 @@ body {
     width: 100%;
     display: grid;
     grid-template-rows: 5rem 1fr;
-    grid-template-columns: 15rem 1fr;
+    grid-template-columns: 20rem 1fr;
 }
 
 aside,
 header,
 main {
-    padding: 8px;
+    padding: 2rem;
 }
 
 aside {
@@ -107,10 +107,15 @@ aside {
     gap: 1rem;
 }
 
-aside form {
+aside>form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+aside>form>div {
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -129,7 +134,7 @@ main {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(auto-fit, 14rem);
-    gap: 4rem;
+    gap: 2rem;
 }
 
 .libraryTile {
@@ -137,14 +142,43 @@ main {
     height: fit-content;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     align-items: center;
     border: 2px solid black;
     border-radius: 0.5rem;
     padding: 1rem;
 }
 
+.bookInfo {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .bookCover {
     width: 8rem;
     height: 10rem;
     background-color: lightgreen;
+    border-radius: 0.5rem;
+}
+
+.bookTitle {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: clip;
+    text-overflow: ellipsis;
+}
+
+.bookAuthor {
+    font-style: italic;
+    white-space: nowrap;
+    overflow: clip;
+    text-overflow: ellipsis;    
+}
+
+.bookXtra {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.2rem;
 }

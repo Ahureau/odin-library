@@ -3,7 +3,7 @@
 function Book(title, author, pageCount, read) {
     this.title = title;
     this.author = author;
-    this.pages = pageCount;
+    this.pageCount = pageCount;
     this.read = read;
     this.info = function () {
         return `${title} by ${author}, ${pageCount} pages, ${read ? "read" : "not read"}`
@@ -12,13 +12,16 @@ function Book(title, author, pageCount, read) {
 
 // Add to library
 function addBookToLibrary(title, author, pageCount, read) {
-    const newBook = new book(title, author, pageCount, read);
+    const newBook = new Book(title, author, pageCount, read);
     myLibrary.push(newBook);
 }
 
 // The library
 const myLibrary = [];
 
+addBookToLibrary("somebook", "someauthor", 235, true);
+addBookToLibrary("some other book", "some other author", 456, false);
+addBookToLibrary("just one more book", "one more author with a long name", 235, true);
 
 // Build in DOM
 function addBook(book) {
@@ -48,9 +51,14 @@ function addBook(book) {
 
     const bookPageCount = bookXtra.appendChild(document.createElement("p"));
     bookPageCount.classList.add("bookPageCount");
-    bookPageCount.textContent = book.pageCount;
+    bookPageCount.textContent = `${book.pageCount} pages`;
 
     const bookRead = bookXtra.appendChild(document.createElement("p"));
     bookRead.classList.add("bookRead");
-    bookTitle.textContent = book.read;
+    bookRead.textContent = book.read ? "✅︎ read" : "❌ read";
+}
+
+for (let i = 0; i < myLibrary.length; i++) {
+    const book = myLibrary[i];
+    addBook(book);
 }
