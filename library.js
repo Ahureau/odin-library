@@ -19,12 +19,18 @@ function addBookToLibrary(title, author, pageCount, read) {
 // The library
 const myLibrary = [];
 
-addBookToLibrary("somebook", "someauthor", 235, true);
-addBookToLibrary("some other book", "some other author", 456, false);
-addBookToLibrary("just one more book", "one more author with a long name", 235, true);
+// Manually adding books for testing
+addBookToLibrary("20,000 leagues Under the Sea", "Jules Verne", 739, true);
+addBookToLibrary("Murder on the Orient Express", "Agatha Christie", 256, true);
+addBookToLibrary("Gone with the Wind", "Margaret Mitchell", 1037, false);
+
+for (let i = 0; i < myLibrary.length; i++) {
+    const book = myLibrary[i];
+    addBook(book, i);
+}
 
 // Build in DOM
-function addBook(book) {
+function addBook(book, index) {
     // Create tile
     const libraryGrid = document.getElementById("libraryGrid");
     const libraryTile = libraryGrid.appendChild(document.createElement("div"));
@@ -56,9 +62,62 @@ function addBook(book) {
     const bookRead = bookXtra.appendChild(document.createElement("p"));
     bookRead.classList.add("bookRead");
     bookRead.textContent = book.read ? "✅︎ read" : "❌ read";
+
+    const closeCrossContainer = libraryTile.appendChild(document.createElement("div"));
+    closeCrossContainer.classList.add("closeCrossContainer");
+
+    const closeCross = closeCrossContainer.appendChild(document.createElement("input"));
+    closeCross.classList.add("closeCross");
+    closeCross.setAttribute("type", "image")
+    closeCross.setAttribute("src", "./Close button.svg")
+    closeCross.setAttribute("data-book-index", index);
 }
 
-for (let i = 0; i < myLibrary.length; i++) {
-    const book = myLibrary[i];
-    addBook(book);
+// Check if new book form is filled
+function isValid() {
+    const form = document.querySelector("#newBookForm");
+    return form.checkValidity();
+}
+
+// New book from form
+const newBookButton = document.getElementById("newBookButton");
+newBookButton.addEventListener("click", () => {
+    if (isValid()) {
+        const newBookForm = document.getElementById("newBookForm");
+        const formData = new FormData(newBookForm);
+
+        const formDataObject = {};
+        for (let [key, value] of formData.entries()) {
+            formDataObject[key] = value;
+        }
+
+        const book = new Book(
+            formDataObject.title,
+            formDataObject.author,
+            formDataObject.pageCount,
+            formDataObject.read === "read" ? true : false
+        );
+
+        addBookToLibrary(book.title, book.author, book.pageCount, book.read)
+
+        addBook(book);
+
+        newBookForm.reset();
+    } else {
+        console.log("The form is invalid")
+    }
+});
+
+// Delete book tile
+const bookGrid = document.querySelector("#libraryGrid");
+bookGrid.addEventListener("click", removeButtons);
+
+function removeButtons(event) {
+    if (event.target.classList.contains('closeCross')) {
+        const bookIndex = Number(event.target.getAttribute("data-book-index"));
+        myLibrary.splice(bookIndex, 1);
+
+        const cardToDelete = event.target.closest('.libraryTile');
+        cardToDelete.parentNode.removeChild(cardToDelete);
+    }
 }
