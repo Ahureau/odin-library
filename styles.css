@@ -194,6 +194,7 @@ main {
     width: 8rem;
     height: 10rem;
     background-color: lightgreen;
+    border: none;
     border-radius: 0.5rem;
     flex-shrink: 0;
 }
