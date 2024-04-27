@@ -1,3 +1,5 @@
+// Index to create unique IDs.
+let uniqueID = 0;
 
 // Book constructor
 function Book(title, author, pageCount, read) {
@@ -7,7 +9,7 @@ function Book(title, author, pageCount, read) {
     this.read = read;
 };
 
-// Book constructor prototype
+// Book constructor prototype functions
 Book.prototype.info = function () {
     return `${this.title} by ${this.author}, ${this.pageCount} pages, ${this.read ? "read" : "not read"}`;
 };
@@ -44,6 +46,7 @@ function addBook(book) {
     // Placeholder for cover img
     const bookCover = libraryTile.appendChild(document.createElement("img"));
     bookCover.classList.add("bookCover");
+    bookCover.style.backgroundColor = randomColor();
 
     // Book details
     const bookInfo = libraryTile.appendChild(document.createElement("div"));
@@ -64,9 +67,17 @@ function addBook(book) {
     bookPageCount.classList.add("bookPageCount");
     bookPageCount.textContent = `${book.pageCount} pages`;
 
-    const bookRead = bookXtra.appendChild(document.createElement("p"));
-    bookRead.classList.add("bookRead");
-    bookRead.textContent = book.read ? "✅︎ read" : "❌ read";
+    const bookReadContainer = bookXtra.appendChild(document.createElement("div"));
+    bookReadContainer.classList.add("readToggleContainer");
+    const bookReadLabel = bookReadContainer.appendChild(document.createElement("label"));
+    bookReadLabel.classList.add("bookReadLabel");
+    bookReadLabel.textContent = "Read"
+    bookReadLabel.setAttribute("for", "checkbox"+uniqueID) // We use the uniqueID here but don't increment yet
+    const bookReadInput = bookReadContainer.appendChild(document.createElement("input"));
+    bookReadInput.classList.add("bookReadInput");
+    bookReadInput.setAttribute("type", "checkbox");
+    bookReadInput.setAttribute("id", "checkbox"+uniqueID++); // Now we increment because we're done using the ID here
+    book.read ? bookReadInput.checked = true : bookReadInput.checked = false;
 
     const closeCrossContainer = libraryTile.appendChild(document.createElement("div"));
     closeCrossContainer.classList.add("closeCrossContainer");
@@ -123,9 +134,31 @@ function removeButtons(event) {
         
         myLibrary.splice(bookIndex, 1);
 
-        console.table(myLibrary);
-
         const cardToDelete = event.target.closest('.libraryTile');
         cardToDelete.parentNode.removeChild(cardToDelete);
     }
+}
+
+// Switch read and not read status using input
+bookGrid.addEventListener("change", (event) => {
+    const checkbox = event.target;
+    const bookTitle = event.target.closest('.libraryTile').querySelector('.bookTitle').textContent;
+    const bookIndex = myLibrary.findIndex(book => book.title === bookTitle);
+    if (checkbox.checked) {
+        myLibrary[bookIndex].readToggle();
+    } else {
+        myLibrary[bookIndex].readToggle();
+    }
+});
+
+
+// Random color generator for the book cover placeholder
+
+function randomColor() {
+    let randomColor = '#';
+    for (let i = 0; i < 6; i++) {
+        randomColor += '0123456789ABCDEF'[Math.floor(Math.random() * 16)];
+    }
+
+    return randomColor;
 }
