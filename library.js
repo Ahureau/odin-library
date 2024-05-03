@@ -1,7 +1,7 @@
-// Index to create unique IDs.
+// Index to create unique IDs. (Future Alex: Now I know this is bad...)
 let uniqueID = 0;
 
-// Book constructor
+// Book class
 
 class Book {
     constructor(title, author, pageCount, read) {
@@ -19,9 +19,6 @@ class Book {
         this.read = !this.read;
     }
 }
-
-// Book constructor prototype functions
-
 
 // Add to library
 function addBookToLibrary(title, author, pageCount, read) {
