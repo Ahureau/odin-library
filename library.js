@@ -2,20 +2,26 @@
 let uniqueID = 0;
 
 // Book constructor
-function Book(title, author, pageCount, read) {
-    this.title = title;
-    this.author = author;
-    this.pageCount = pageCount;
-    this.read = read;
-};
+
+class Book {
+    constructor(title, author, pageCount, read) {
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.read = read;
+    }
+
+    info() {
+        return `${this.title} by ${this.author}, ${this.pageCount} pages, ${this.read ? "read" : "not read"}`;
+    };
+
+    readToggle() {
+        this.read = !this.read;
+    }
+}
 
 // Book constructor prototype functions
-Book.prototype.info = function () {
-    return `${this.title} by ${this.author}, ${this.pageCount} pages, ${this.read ? "read" : "not read"}`;
-};
-Book.prototype.readToggle = function () {
-    this.read = !this.read;
-}
+
 
 // Add to library
 function addBookToLibrary(title, author, pageCount, read) {
